@@ -5,11 +5,21 @@
     <meta http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do List</title>
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
 </head>
 <body>
-    <h1>It,s <%= kindOfDay %> !</h1>
+    <h1><%= kindOfDay %></h1>
+    <ul>
+         <%   for(i=0;i<todoListForHtml.length;i++){ %>
+                <% let str = "number"+i;%>
+                 <li> <%= todoListForHtml[i] %>  </li> 
+                 <% } %>  
+    </ul>
   
-    <p>Way are you do not working?</p>
+    <form action="/" method="post">
+        <input type="text" name="newItem">
+        <button type="submit">ADD TO LIST</button>
+    </form>
     
 </body>
 </html>

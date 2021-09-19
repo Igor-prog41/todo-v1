@@ -1,51 +1,38 @@
-const expres = require('express');
+const express = require('express');
 
-const app= expres();
+const app= express();
+
+app.use(express.urlencoded({extended:true}));
 
 app.set('view engine', 'ejs');
 
+const options = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long'
+};
+
+let itemsForTodoList=['Buy food','Cook food','Eat food'];
+
 app.get('/',(req,res)=>{
-    let today =new Date();
-    let numberOfDayInTheWeek = today.getDay();
-    let nameOfDay = "";
 
-    switch (numberOfDayInTheWeek) {
+    const today =new Date();
 
-        case 0:
-            nameOfDay = "Sunday"
-            break;
-        case 1:
-            nameOfDay = "Monday"
-            break;
-        case 2:
-            nameOfDay = "Tuesday"
-            break;
-        case 3:
-            nameOfDay = "Wednesday"
-            break;
-        case 4:
-            nameOfDay = "Thursday"
-            break;
-
-        case 5:
-            nameOfDay = "Friday"
-            break;
-
-        case 6:
-            nameOfDay = "Saturday"
-            break;     
-
-        default:
-            console.log("Error: current day is egual to "+ numberOfDayInTheWeek);
-            nameOfDay="day";
-          break;
-      }
-
-    
-    res.render('list', { kindOfDay: nameOfDay});
+    const  dayToday = today.toLocaleDateString('en-US',options);
+   
+    res.render('list', { kindOfDay: dayToday,
+                            todoListForHtml: itemsForTodoList});
     // <!-- <%= kindOfDay %> -->
 
 });
+
+app.post('/',(req,res)=>{
+    // console.log(req.body.newItem);
+
+    itemsForTodoList.push(req.body.newItem);
+ 
+    res.redirect('/');
+})
 
 app.listen(3000, function(){
     console.log('sever started on port 3000');
