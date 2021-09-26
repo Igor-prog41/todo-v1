@@ -1,5 +1,5 @@
 const express = require("express");
-
+const date = require(__dirname+"/date.js");
 const app= express();
 
 app.set("view engine", "ejs");
@@ -7,40 +7,29 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({extended:true}));
 app.use(express.static("public"));
 
-const options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long"
-};
 
-let itemsForTodoList=["Buy food","Cook food","Eat food"];
-let itemsForWorkTodoList=["Buy pen","Write letter","Send letter"];
+const itemsForTodoList=["Buy food","Cook food","Eat food"];
+const itemsForWorkTodoList=["Buy pen","Write letter","Send letter"];
 
 app.get("/",(req,res)=>{
 
-    const today =new Date();
-
-    const  dayToday = today.toLocaleDateString("en-US",options);
+    const dayToday=date.getDate();
    
     res.render("list", { listTitle: dayToday,
-                            todoListForHtml: itemsForTodoList});
-    // <!-- <%= kindOfDay %> -->
-
+                         todoListForHtml: itemsForTodoList});
 });
 
 app.get("/work",(req,res)=>{
-    res.render("list", { listTitle:"Work List",
+    res.render("list", { listTitle:"Work List for "+date.getDay(),
                          todoListForHtml : itemsForWorkTodoList })
 })
 
 app.get("/about",(req,res)=>{
     res.render("about")
 })
-// listTitle:"Work List"  newListItems
-
 
 app.post('/',(req,res)=>{
-    //  console.log(req.body);
+
 
     if (req.body.list==="Work"){
         itemsForWorkTodoList.push(req.body.newItem);
